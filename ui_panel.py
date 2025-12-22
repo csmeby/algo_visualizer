@@ -14,7 +14,7 @@ class UIPanel:
         self.font_body = pygame.font.SysFont('arial', 18)
         self.font_small = pygame.font.SysFont('arial', 14)
 
-    def draw(self, screen, algo_name, slider):
+    def draw(self, screen, algo_name, time_slider, complexity_slider):
         pygame.draw.rect(screen, BG_COLOR, (self.x, self.y, self.width, self.height))
         
         title_surf = self.font_title.render("Visualizer", True, ACCENT_COLOR)
@@ -25,19 +25,21 @@ class UIPanel:
         
         instructions = [
             "Controls:",
-            "Space: Run / Reset",
+            "Space: Run",
             "M: Generate Maze",
             "C: Clear Grid",
+            "",
             "1: BFS",
             "2: DFS",
             "3: Dijkstra",
             "4: A*",
+            "5: Greedy",
             "",
             "Left Click: Draw",
             "Right Click: Erase"
         ]
         
-        start_y = 300
+        start_y = 360
         for line in instructions:
             text_surf = self.font_small.render(line, True, TEXT_COLOR)
             screen.blit(text_surf, (self.x + 20, start_y))

@@ -1,13 +1,15 @@
 import pygame
 
 class Slider:
-    def __init__(self, x, y, width, min_value, max_value, initial_value):
+    def __init__(self, x, y, width, min_value, max_value, initial_value, label="Value", units=""):
         self.x = x
         self.y = y
         self.width = width
         self.min_value = min_value
         self.max_value = max_value
         self.value = initial_value
+        self.label = label
+        self.units = units
         self.slider_width = 10
         self.dragging = False
 
@@ -18,7 +20,7 @@ class Slider:
         pygame.draw.rect(screen, (255, 0, 0), (knob_position, self.y - 5, self.slider_width, 20))
         
         font = pygame.font.Font(None, 30)
-        value_text = font.render(f"Delay: {int(self.value)}ms", True, (255, 255, 255))
+        value_text = font.render(f"{self.label}: {int(self.value)}{self.units}", True, (255, 255, 255))
         screen.blit(value_text, (self.x + self.width + 10, self.y - 5))
 
     def handle_event(self, event):
