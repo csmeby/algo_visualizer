@@ -3,7 +3,6 @@ from collections import deque
 import pygame
 
 def generate_maze(draw, grid, rows, complexity, check_events=None):
-    # 1) Start with everything as a wall
     for row in grid:
         for node in row:
             node.make_barrier()
@@ -14,7 +13,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
     visited = {(start_x, start_y)}
     directions = [(0, 2), (0, -2), (2, 0), (-2, 0)]
 
-    # 2) Classic DFS maze generation (perfect maze)
     while stack:
         if check_events:
             for event in pygame.event.get():
@@ -43,9 +41,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
         else:
             stack.pop()
 
-    # 3) Add complexity by breaking some walls to create loops
-    #    `complexity` is just an arbitrary integer – tune as you like.
-    #    You could also interpret it as a probability.
     wall_cells = []
     for i in range(1, rows - 1):
         for j in range(1, rows - 1):
@@ -54,7 +49,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
                 # Only consider interior walls (not outer border)
                 wall_cells.append((i, j))
 
-    # Example: try to open up to `complexity` walls (or fewer if not enough)
     openings = min(complexity, len(wall_cells))
     random.shuffle(wall_cells)
 
@@ -63,9 +57,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
         if opened >= openings:
             break
 
-        # Optionally: only break walls that connect two open regions
-        # to ensure we create meaningful loops (not just dead pockets).
-        # Here we do a simple heuristic: if at least two neighbors are open.
         open_neighbors = 0
         for dx, dy in [(1,0), (-1,0), (0,1), (0,-1)]:
             ni, nj = i + dx, j + dy
@@ -77,7 +68,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
             grid[i][j].reset()
             opened += 1
 
-    # 4) Recompute neighbors now that walls and passages are finalized
     for row in grid:
         for node in row:
             node.update_neighbors(grid)
@@ -98,7 +88,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
                     queue.append((neighbor, dist + 1))
         return farthest[0]
 
-    # Choose start/end as you already do
     random_node = random.choice(open_nodes)
     start = bfs_farthest(random_node)
     end = bfs_farthest(start)
