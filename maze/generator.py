@@ -46,7 +46,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
         for j in range(1, rows - 1):
             node = grid[i][j]
             if node.is_barrier():
-                # Only consider interior walls (not outer border)
                 wall_cells.append((i, j))
 
     openings = min(complexity, len(wall_cells))
@@ -63,7 +62,6 @@ def generate_maze(draw, grid, rows, complexity, check_events=None):
             if 0 <= ni < rows and 0 <= nj < rows and not grid[ni][nj].is_barrier():
                 open_neighbors += 1
 
-        # Require at least 2 open neighbors to create a loop
         if open_neighbors >= 2:
             grid[i][j].reset()
             opened += 1
